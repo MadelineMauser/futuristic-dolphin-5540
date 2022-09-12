@@ -49,6 +49,16 @@ RSpec.describe 'mechanics show page', type: :feature do
 
         expect(page).to_not have_content("Teacups")
       end
+      it 'lists rides by thrill rating in descending order' do
+        visit "/mechanics/#{@kara.id}"
+
+        let(:most_thrilling) {'<p>The Hurler</p>'}
+        let(:moderately_thrilling) {'<p>Jaws</p>'}
+        let(:least_thrilling) {'<p>The Scrambler</p>'}
+
+        expect(most_thrilling).to appear_before(moderately_thrilling)
+        expect(moderately_thrilling).to appear_before(least_thrilling)
+      end
     end
   end
 end
