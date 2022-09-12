@@ -10,6 +10,7 @@ RSpec.describe 'mechanics show page', type: :feature do
     @hurler = @six_flags.rides.create!(name: 'The Hurler', thrill_rating: 7, open: true)
     @scrambler = @six_flags.rides.create!(name: 'The Scrambler', thrill_rating: 4, open: true)
     @ferris = @six_flags.rides.create!(name: 'Ferris Wheel', thrill_rating: 7, open: false)
+    @teacups = @six_flags.rides.create!(name: 'Teacups', thrill_rating: 4, open: true)
     @jaws = @universal.rides.create!(name: 'Jaws', thrill_rating: 5, open: true)
 
     @assignment1 = MechanicRide.create!(mechanic_id: @kara.id, ride_id: @hurler.id)
@@ -31,7 +32,23 @@ RSpec.describe 'mechanics show page', type: :feature do
       end
     end
     describe 'mechanic ride info' do
-      
+      it 'shows the names of all open rides' do
+        visit "/mechanics/#{@kara.id}"
+
+        expect(page).to have_content("The Hurler")
+        expect(page).to have_content("The Scrambler")
+        expect(page).to have_content("Jaws")
+      end
+      it 'does not show the names of closed rides' do
+        visit "/mechanics/#{@kara.id}"
+
+        expect(page).to_not have_content("Ferris Wheel")
+      end
+      it 'does not show the names of rides that are not assigned to the mechanic' do
+        visit "/mechanics/#{@kara.id}"
+
+        expect(page).to_not have_content("Teacups")
+      end
     end
   end
 end
